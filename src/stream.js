@@ -56,7 +56,9 @@ const printChanges = (oldFiles, newFiles) => {
     if (!newFiles.includes(oldFiles[i])) {
       log('deleted file: ' + oldFiles[i])
     } else {
-      createdFiles = createdFiles.filter((value) => { value !== oldFiles[i] })
+      createdFiles = createdFiles.filter((value) => {
+        return value !== oldFiles[i]
+      })
     }
   }
 

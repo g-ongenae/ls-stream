@@ -10,13 +10,6 @@ git clone https://github.com/g-ongenae/ls-stream.git
 cd ls-stream/
 ```
 
-Install with [Yarn](https://yarnpkg.com):
-```
-yarn install
-// Or if you prefer npm
-npm install
-```
-
 ## Launching
 
 With the default waiting time of 1s:

@@ -3,7 +3,7 @@
 // Internals dependencies
 const { version, description } = require('../package.json')
 const stream = require('./stream')
-const log = console.log
+const { log, error } = console
 
 // Variables
 let directory
@@ -15,51 +15,55 @@ const help =
   ' <dir>           the directory to watched required\n' +
   ' [waiting_time]  time before checking the directory again'
 
-if (process.argv.length < 3) {
-  console.error('Missing arguments\n' + help)
-  process.exit(1)
-}
+function checkArguments(args) {
+  return new Promise((resolve, reject) => {
+    if (args.length < 3) {
+      return reject('Missing arguments\n' + help)
+    }
 
-for (let i = 2; i < process.argv.length; i++) {
-  switch (process.argv[i]) {
-    case '-h':
-    case '--help':
-      log(help)
-      process.exit(0)
-      break
-    case '--usage':
-    case '--description':
-      log(description)
-      process.exit(0)
-      break
-    case '-v':
-    case '--version':
-      log(version)
-      process.exit(0)
-      break
-    default:
-      if (!directory) {
-        directory = process.argv[i]
-      } else if (!waiting_time) {
-        const checkValue = parseInt(process.argv[i])
-        if (isNaN(checkValue)) {
-          console.error('Wrong Params: ' + process.argv[i] + '\n' + help)
-          process.exit(1)
-        } else {
-          waiting_time = checkValue
-        }
-      } else {
-        continue
+    for (let i = 2; i < args.length; i++) {
+      switch (args[i]) {
+        case '-h':
+        case '--help':
+          return resolve(help)
+        case '--usage':
+        case '--description':
+          return resolve(description)
+        case '-v':
+        case '--version':
+          return resolve(version)
+        default:
+          if (!directory) {
+            directory = args[i]
+            if (directory[0] === '~') {
+              directory.replace('~', process.env.HOME)
+            }
+          } else if (!waiting_time) {
+            const checkValue = parseInt(args[i], 10)
+
+            if (isNaN(checkValue)) {
+              return reject('Wrong Params: ' + args[i] + '\n' + help)
+            } else {
+              waiting_time = checkValue
+            }
+          } else {
+            return resolve()
+          }
       }
-  }
+    }
+  })
 }
 
-function main(dir, waiting_time) {
-  dir.replace('~', process.env.HOME)
-  stream(dir, waiting_time)
-    .catch((err) => {
-      console.error(err)
-    })
-}
-
-main(directory, waiting_time)
+checkArguments(process.argv)
+  .then((message) => {
+    if (message) {
+      log(message)
+      return Promise.resolve()
+    }
+    if (directory) {
+      stream(directory, waiting_time)
+    }
+  })
+  .catch((err) => {
+    error(err)
+  })

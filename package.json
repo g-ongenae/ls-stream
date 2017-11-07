@@ -10,7 +10,5 @@
   "bin": {
     "ls-stream": "src/index.js"
   },
-  "devDependencies": {
-    "eslint": "^4.10.0"
-  }
+  "devDependencies": {}
 }
