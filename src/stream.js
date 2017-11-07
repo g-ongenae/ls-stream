@@ -6,11 +6,13 @@ const fs = require('fs')
 // Globals
 let WAITING_TIME
 let DIRECTORY
+let log
 
-const main = (directory, time) => {
+const main = (directory, time, cb) => {
   return new Promise((resolve) => {
     DIRECTORY = directory
-    WAITING_TIME = time
+    WAITING_TIME = time || 1000
+    log = cb || console.log
     return resolve(changes([]))
   })
   .then((files) => {
@@ -52,15 +54,15 @@ const printChanges = (oldFiles, newFiles) => {
   // Print deleted files & remove conserved files from a tmp list
   for (let i = 0; i < oldFiles.length; i++) {
     if (!newFiles.includes(oldFiles[i])) {
-      console.log('deleted file: ' + oldFiles[i]) // eslint-disable-line
+      log('deleted file: ' + oldFiles[i])
     } else {
-      createdFiles = createdFiles.filter((value) => { value!= oldFiles[i] })
+      createdFiles = createdFiles.filter((value) => { value !== oldFiles[i] })
     }
   }
 
   // Print new created files
   for (let j = 0; j < createdFiles.length; j++) {
-    console.log('created file: ' + createdFiles[j]) // eslint-disable-line
+    log('created file: ' + createdFiles[j])
   }
 }
 
