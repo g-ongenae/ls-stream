@@ -6,9 +6,7 @@
   "repository": "g-ongenae/ls-stream",
   "author": "Guillaume Ongenae <guillaume.ongenae@gmail.com> (https://g-ongenae.github.io)",
   "license": "MIT",
-  "dependencies": {
-    "commander": "^2.11.0"
-  },
+  "dependencies": {},
   "bin": {
     "ls-stream": "src/index.js"
   },
