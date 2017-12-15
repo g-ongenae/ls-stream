@@ -51,6 +51,8 @@ function checkArguments(args) {
           }
       }
     }
+
+    return resolve()
   })
 }
 
