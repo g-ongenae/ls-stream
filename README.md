@@ -1,5 +1,7 @@
 # ls-stream
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/g-ongenae/ls-stream.svg)](https://greenkeeper.io/)
+
 Stream created and deleted files in a given folder.
 
 ## Installing
